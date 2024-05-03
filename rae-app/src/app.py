@@ -1,5 +1,6 @@
 import threading
 import asyncio
+import time
 
 import depthai as dai
 import webrtc_python
@@ -68,6 +69,8 @@ class RaeDemo:
                 self.rtcClients.append(webrtc_data_channel)
             except Exception as e:
                 print(e)
+
+            time.sleep(3)
 
 
 if __name__ == "__main__":
