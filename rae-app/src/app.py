@@ -1,9 +1,11 @@
 import threading
 import asyncio
 import time
+from typing import cast
 
 import depthai as dai
 import webrtc_python
+import msgpack
 from rae_sdk.robot import Robot
 from tinyrpc.protocols.msgpackrpc import (
     MSGPACKRPCProtocol,
@@ -44,9 +46,16 @@ class RaeDemo:
         while True:
             if left_camera_queue.has():
                 img = left_camera_queue.get()
+                message = {
+                    "queue": "camera",
+                    "data": img.getData().tobytes(),
+                    "width": img.getWidth(),
+                    "height": img.getHeight(),
+                }
+                data = cast(bytes, msgpack.dumps(message))
 
                 for rtcClient in self.rtcClients:
-                    rtcClient.send("Hello from RAE")
+                    rtcClient.send(data)
 
     def connection_handler(self):
         pass
