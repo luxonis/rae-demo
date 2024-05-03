@@ -58,14 +58,6 @@ class RaeDemo:
                     rtcClient.send(data)
 
     def connection_handler(self):
-        pass
-
-    def run(self):
-        print("Running rae demo")
-
-        stream_thread = threading.Thread(target=self.stream_data)
-        stream_thread.start()
-
         config = webrtc_python.WebRTCConfig(
             client_id="1", signaling_url="wss://signal.cloud.luxonis.com/agent/"
         )
@@ -80,6 +72,24 @@ class RaeDemo:
                 print(e)
 
             time.sleep(3)
+
+    def run(self):
+        print("Running rae demo")
+
+        stream_thread = threading.Thread(target=self.stream_data)
+        stream_thread.start()
+
+        connection_thread = threading.Thread(target=self.connection_handler)
+        connection_thread.start()
+
+        rpc = MSGPACKRPCProtocol()
+
+        while True:
+            for rtcClient in self.rtcClients:
+                message = rtcClient.receive()
+                print(message)
+
+                print(rpc.parse_request(message))
 
 
 if __name__ == "__main__":
