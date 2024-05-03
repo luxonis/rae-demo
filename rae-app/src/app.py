@@ -1,11 +1,14 @@
 import threading
-import depthai as dai
-from rae_sdk.robot import Robot
 import asyncio
+
+import depthai as dai
+import webrtc_python
+from rae_sdk.robot import Robot
 from tinyrpc.protocols.msgpackrpc import (
     MSGPACKRPCProtocol,
 )
 from pipeline import create_pipeline
+
 
 LOCALHOST = "127.0.0.1"
 
@@ -13,6 +16,8 @@ LOCALHOST = "127.0.0.1"
 class RaeDemo:
     robot = None
     device: dai.Device
+
+    rtcClients = []
 
     def __init__(self):
         print("Initializing rae demo")
@@ -38,7 +43,9 @@ class RaeDemo:
         while True:
             if left_camera_queue.has():
                 img = left_camera_queue.get()
-                print("Received camera image")
+
+                for rtcClient in self.rtcClients:
+                    rtcClient.send("Hello from RAE")
 
     def connection_handler(self):
         pass
@@ -49,8 +56,18 @@ class RaeDemo:
         stream_thread = threading.Thread(target=self.stream_data)
         stream_thread.start()
 
+        config = webrtc_python.WebRTCConfig(
+            client_id="1", signaling_url="wss://signal.cloud.luxonis.com/agent/"
+        )
+        webrtc = webrtc_python.WebRTC(config)
+
         while True:
-            pass
+            try:
+                webrtc_connection = webrtc.accept_connection(10)
+                webrtc_data_channel = webrtc_connection.create_data_channel("track")
+                self.rtcClients.append(webrtc_data_channel)
+            except Exception as e:
+                print(e)
 
 
 if __name__ == "__main__":
