@@ -1,13 +1,14 @@
 import "./App.css";
-import { QRCode } from "./QRCode";
+import { ConnectionStatusRouter } from "./ConnectionStatusRouter";
+import { VisualizerContainer } from "./VisualizerContainer";
 
 function App() {
   return (
     <>
-      <div>
-        <QRCode />
-      </div>
       <h1>RAE Demo</h1>
+      <VisualizerContainer>
+        <ConnectionStatusRouter />
+      </VisualizerContainer>
     </>
   );
 }

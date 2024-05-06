@@ -1,17 +1,26 @@
 import { toCanvas } from "qrcode";
-import { useEffect, useRef } from "react";
+import { memo, useEffect, useMemo, useRef } from "react";
 
 const QR_CODE_WIDTH = 300;
 
-export const QRCode = () => {
+export const QRCode = memo(function QRCode(props: { clientId: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const codeContent = useMemo(
+    () => JSON.stringify({ client_id: props.clientId }),
+    [props.clientId]
+  );
 
   useEffect(() => {
     if (canvasRef.current) {
       const canvas = canvasRef.current;
-      toCanvas(canvas, "https://www.luxonis.com", { width: QR_CODE_WIDTH });
+      toCanvas(canvas, codeContent, { width: QR_CODE_WIDTH });
     }
-  }, [canvasRef]);
+  }, [canvasRef, codeContent]);
 
-  return <canvas ref={canvasRef} />;
-};
+  return (
+    <div>
+      <canvas ref={canvasRef} />
+    </div>
+  );
+});
