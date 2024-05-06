@@ -21,12 +21,14 @@ LOCALHOST = "127.0.0.1"
 class RaeDemo:
     robot = None
     device: dai.Device
+    qreader: QReader
 
     rtcClients = []
 
     def __init__(self):
         print("Initializing rae demo")
         # self.robot = Robot()
+        self.qreader = QReader()
 
         available_devices = dai.Device.getAllAvailableDevices()
         local_devices = list(
@@ -78,28 +80,32 @@ class RaeDemo:
 
     # Read connection config from a QR code
     def read_connection_config(self):
-        left_camera_queue = self.device.getOutputQueue(
-            name="left_cam", maxSize=4, blocking=False
+        main_camera_queue = self.device.getOutputQueue(
+            name="main_cam", maxSize=4, blocking=False
         )
 
         print("Reading connection config ...")
 
         while True:
-            if left_camera_queue.has():
-                img = left_camera_queue.get()
+            if main_camera_queue.has():
+                img = main_camera_queue.get()
 
-                qr_detections = qreader.detect(img.getData())
+                qr_detections = self.qreader.detect(img.getCvFrame())
+                if qr_detections:
+                    print(qr_detections)
+
                 decoded_contents = map(
-                    lambda d: qreader.decode(img.getData(), d), qr_detections
+                    lambda d: self.qreader.decode(img.getCvFrame(), d), qr_detections
                 )
 
                 for qr_content in decoded_contents:
+                    print("Decoded: ", qr_content)
                     try:
                         connection_config = json.loads(qr_content)
                         if "client_id" in connection_config:
                             return connection_config
-                    except json.JSONDecodeError:
-                        continue
+                    except Exception:
+                        pass
 
     def run(self):
         print("Running rae demo")
