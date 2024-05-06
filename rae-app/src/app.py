@@ -4,8 +4,8 @@ import asyncio
 import time
 from typing import cast
 
-from qreader import QReader
 import depthai as dai
+import cv2
 import webrtc_python
 import msgpack
 from rae_sdk.robot import Robot
@@ -22,14 +22,12 @@ LOCALHOST = "127.0.0.1"
 class RaeDemo:
     robot = None
     device: dai.Device
-    qreader: QReader
 
     connection: Connection | None = None
 
     def __init__(self):
         print("Initializing rae demo")
         # self.robot = Robot()
-        self.qreader = QReader()
 
         available_devices = dai.Device.getAllAvailableDevices()
         local_devices = list(
@@ -83,19 +81,17 @@ class RaeDemo:
 
         print("Reading connection config ...")
 
+        qcd = cv2.QRCodeDetector()
+
         while True:
             if main_camera_queue.has():
                 img = main_camera_queue.get()
 
-                qr_detections = self.qreader.detect(img.getCvFrame())
-                if qr_detections:
-                    print(qr_detections)
+                success, detections, _, _ = qcd.detectAndDecodeMulti(img.getCvFrame())
+                if not success:
+                    continue
 
-                decoded_contents = map(
-                    lambda d: self.qreader.decode(img.getCvFrame(), d), qr_detections
-                )
-
-                for qr_content in decoded_contents:
+                for qr_content in detections:
                     print("Decoded: ", qr_content)
                     try:
                         connection_config = json.loads(qr_content)
