@@ -1,8 +1,10 @@
+import json
 import threading
 import asyncio
 import time
 from typing import cast
 
+from qreader import QReader
 import depthai as dai
 import webrtc_python
 import msgpack
@@ -57,9 +59,10 @@ class RaeDemo:
                 for rtcClient in self.rtcClients:
                     rtcClient.send(data)
 
-    def connection_handler(self):
+    def connection_handler(self, client_id: str):
+        print(f"[{client_id}] Opening connection ...")
         config = webrtc_python.WebRTCConfig(
-            client_id="1", signaling_url="wss://signal.cloud.luxonis.com/agent/"
+            client_id=client_id, signaling_url="wss://signal.cloud.luxonis.com/agent/"
         )
         webrtc = webrtc_python.WebRTC(config)
 
@@ -73,13 +76,42 @@ class RaeDemo:
 
             time.sleep(3)
 
+    # Read connection config from a QR code
+    def read_connection_config(self):
+        left_camera_queue = self.device.getOutputQueue(
+            name="left_cam", maxSize=4, blocking=False
+        )
+
+        print("Reading connection config ...")
+
+        while True:
+            if left_camera_queue.has():
+                img = left_camera_queue.get()
+
+                qr_detections = qreader.detect(img.getData())
+                decoded_contents = map(
+                    lambda d: qreader.decode(img.getData(), d), qr_detections
+                )
+
+                for qr_content in decoded_contents:
+                    try:
+                        connection_config = json.loads(qr_content)
+                        if "client_id" in connection_config:
+                            return connection_config
+                    except json.JSONDecodeError:
+                        continue
+
     def run(self):
         print("Running rae demo")
+
+        connection_config = self.read_connection_config()
 
         stream_thread = threading.Thread(target=self.stream_data)
         stream_thread.start()
 
-        connection_thread = threading.Thread(target=self.connection_handler)
+        connection_thread = threading.Thread(
+            target=lambda: self.connection_handler(connection_config["client_id"])
+        )
         connection_thread.start()
 
         rpc = MSGPACKRPCProtocol()

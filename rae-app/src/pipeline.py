@@ -20,7 +20,7 @@ def create_pipeline(device: dai.Device):
     left_cam = pipeline.create(dai.node.ColorCamera)
     left_cam.setInterleaved(True)
     left_cam.setBoardSocket(left_camera_socket)
-    left_cam.setCalibrationAlpha
+    left_cam.setColorOrder(dai.ColorCameraProperties.ColorOrder.RGB)
     left_cam.setResolution(dai.ColorCameraProperties.SensorResolution.THE_800_P)
     left_cam.setPreviewSize(640, 480)
     left_cam.setFps(30)
