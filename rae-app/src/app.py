@@ -13,6 +13,7 @@ from tinyrpc.protocols.msgpackrpc import (
     MSGPACKRPCProtocol,
 )
 from pipeline import create_pipeline
+from connection import Connection
 
 
 LOCALHOST = "127.0.0.1"
@@ -23,7 +24,7 @@ class RaeDemo:
     device: dai.Device
     qreader: QReader
 
-    rtcClients = []
+    connection: Connection | None = None
 
     def __init__(self):
         print("Initializing rae demo")
@@ -58,21 +59,17 @@ class RaeDemo:
                 }
                 data = cast(bytes, msgpack.dumps(message))
 
-                for rtcClient in self.rtcClients:
-                    rtcClient.send(data)
+                if self.connection:
+                    self.connection.broadcast(data)
 
     def connection_handler(self, client_id: str):
         print(f"[{client_id}] Opening connection ...")
-        config = webrtc_python.WebRTCConfig(
-            client_id=client_id, signaling_url="wss://signal.cloud.luxonis.com/agent/"
-        )
-        webrtc = webrtc_python.WebRTC(config)
+
+        self.connection = Connection(client_id)
 
         while True:
             try:
-                webrtc_connection = webrtc.accept_connection(10)
-                webrtc_data_channel = webrtc_connection.create_data_channel("track")
-                self.rtcClients.append(webrtc_data_channel)
+                self.connection.accept()
             except Exception as e:
                 print(e)
 
@@ -123,11 +120,7 @@ class RaeDemo:
         rpc = MSGPACKRPCProtocol()
 
         while True:
-            for rtcClient in self.rtcClients:
-                message = rtcClient.receive()
-                print(message)
-
-                print(rpc.parse_request(message))
+            pass
 
 
 if __name__ == "__main__":
