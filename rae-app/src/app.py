@@ -6,7 +6,6 @@ from typing import cast
 
 import depthai as dai
 import cv2
-import webrtc_python
 import msgpack
 from rae_sdk.robot import Robot
 from tinyrpc.protocols.msgpackrpc import (

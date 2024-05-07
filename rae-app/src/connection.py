@@ -2,17 +2,17 @@ import webrtc_python
 
 
 class Connection:
-    config: webrtc_python.WebRTCConfig
-    connection: webrtc_python.WebRTC
+    config: webrtc_python.WebRtcConfig
+    connection: webrtc_python.WebRtc
 
     channels = []
 
     def __init__(self, client_id):
-        self.config = webrtc_python.WebRTCConfig(
+        self.config = webrtc_python.WebRtcConfig(
             client_id=client_id, signaling_url="wss://signal.cloud.luxonis.com/agent/"
         )
 
-        self.connection = webrtc_python.WebRTC(self.config)
+        self.connection = webrtc_python.WebRtc(self.config)
 
     def accept(self):
         connection_handle = self.connection.accept_connection(10)
