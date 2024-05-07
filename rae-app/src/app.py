@@ -42,9 +42,11 @@ class RaeDemo:
         self.rgb_queue = self.device.getOutputQueue(
             name="rgb", maxSize=4, blocking=False
         )
+        self.h264_queue = self.device.getOutputQueue(
+            name="h264", maxSize=4, blocking=False
+        )
 
-    def stream_data(self):
-
+    def stream_rgb_data(self):
         while True:
             if self.rgb_queue.has():
                 img = self.rgb_queue.get()
@@ -53,6 +55,21 @@ class RaeDemo:
                     "data": img.getData().tobytes(),
                     "width": img.getWidth(),
                     "height": img.getHeight(),
+                }
+                data = cast(bytes, msgpack.dumps(message))
+
+                if self.connection:
+                    self.connection.broadcast(data)
+
+    def stream_h264_data(self):
+        while True:
+            if self.h264_queue.has():
+                encodedFrame = self.h264_queue.get()
+                message = {
+                    "format": "h264",
+                    "queue": "camera",
+                    "data": encodedFrame.getData().tobytes(),
+                    "frame_type": encodedFrame.getFrameType(),
                 }
                 data = cast(bytes, msgpack.dumps(message))
 
@@ -100,11 +117,12 @@ class RaeDemo:
 
         connection_config = self.read_connection_config()
 
-        stream_thread = threading.Thread(target=self.stream_data)
+        stream_thread = threading.Thread(target=self.stream_h264_data, daemon=True)
         stream_thread.start()
 
         connection_thread = threading.Thread(
-            target=lambda: self.connection_handler(connection_config["client_id"])
+            target=lambda: self.connection_handler(connection_config["client_id"]),
+            daemon=True,
         )
         connection_thread.start()
 
