@@ -76,22 +76,22 @@ class RaeDemo:
     # Read connection config from a QR code
     def read_connection_config(self):
         main_camera_queue = self.device.getOutputQueue(
-            name="main_cam", maxSize=4, blocking=False
+            name="main_cam", maxSize=1, blocking=False
         )
 
         print("Reading connection config ...")
 
-        qcd = cv2.QRCodeDetector()
+        qcd = cv2.wechat_qrcode_WeChatQRCode()
 
         while True:
             if main_camera_queue.has():
                 img = main_camera_queue.get()
 
-                success, detections, _, _ = qcd.detectAndDecodeMulti(img.getCvFrame())
-                if not success:
+                results, _ = qcd.detectAndDecode(img.getCvFrame())
+                if not results:
                     continue
 
-                for qr_content in detections:
+                for qr_content in results:
                     print("Decoded: ", qr_content)
                     try:
                         connection_config = json.loads(qr_content)
