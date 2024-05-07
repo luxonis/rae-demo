@@ -6,6 +6,8 @@ class Connection:
     config: webrtc_python.WebRtcConfig
     connection: webrtc_python.WebRtc
 
+    connection_lock = threading.Lock()
+
     clients = []
 
     def __init__(self, client_id):
@@ -42,8 +44,12 @@ class Connection:
             chunk = data[chunk_start_idx:chunk_end_idx]
             chunk = header + chunk
 
+            self.connection_lock.acquire()
+
             for client in self.clients:
                 client["data_channel"].send(chunk)
+
+            self.connection_lock.release()
 
     def receive(self):
         # TODO: Implement for multiple clients
@@ -58,9 +64,13 @@ class Connection:
             global bytes_read
             bytes_read = client["data_channel"].receive(buffer)
 
+        self.connection_lock.acquire()
+
         thread = threading.Thread(target=receive_data)
         thread.start()
         thread.join(0.01)
+
+        self.connection_lock.release()
 
         if bytes_read > 0:
             return buffer[:bytes_read]
