@@ -64,12 +64,13 @@ class RaeDemo:
     def stream_h264_data(self):
         while True:
             if self.h264_queue.has():
-                encodedFrame = self.h264_queue.get()
+                img = self.h264_queue.get()
                 message = {
                     "format": "h264",
                     "queue": "camera",
-                    "data": encodedFrame.getData().tobytes(),
-                    "frame_type": encodedFrame.getFrameType(),
+                    "data": img.getData().tobytes(),
+                    "width": img.getWidth(),
+                    "height": img.getHeight(),
                 }
                 data = cast(bytes, msgpack.dumps(message))
 
@@ -129,9 +130,7 @@ class RaeDemo:
         rpc = MSGPACKRPCProtocol()
 
         while True:
-            if self.connection:
-                msg = self.connection.receive()
-                print(msg)
+            pass
 
 
 if __name__ == "__main__":
