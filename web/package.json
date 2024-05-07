@@ -27,6 +27,7 @@
     "qrcode": "^1.5.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "string-hash": "^1.1.3",
     "use-sync-external-store": "^1.2.0",
     "uuid": "^9.0.1",
     "ws": "^8.17.0"
@@ -36,6 +37,7 @@
     "@types/qrcode": "^1",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
+    "@types/string-hash": "^1",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react": "^4.2.1",
