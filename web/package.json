@@ -18,6 +18,7 @@
     "@mui/material": "^5.15.15",
     "@types/uuid": "^9.0.8",
     "color": "^4.2.3",
+    "complex.js": "^2.1.1",
     "depthai-visualizer": "./depthai-visualizer.tgz",
     "extend": "^3.0.2",
     "hydrated-ws": "^1.2.6",
