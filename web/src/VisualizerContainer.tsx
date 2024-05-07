@@ -26,7 +26,9 @@ export function VisualizerContainer(props: { children: React.ReactNode }) {
           mono: "mono8",
         };
 
+        // @ts-expect-error - missing type from foxglove
         const topic = topicByCategory[message.category];
+        // @ts-expect-error - missing type from foxglove
         const encoding = encodingByCategory[message.category];
 
         const deserializedMessage = {
