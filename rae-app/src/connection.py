@@ -22,10 +22,9 @@ class Connection:
     def broadcast(self, data: bytes):
         chunk_size = 16 * 1024 - 8  # 16KB - 8 bytes for header
         content_length = len(data)
-        chunk_idx = 0
         n_chunks = (content_length // chunk_size) + 1
 
-        while chunk_idx < n_chunks:
+        for chunk_idx in range(n_chunks):
             header = chunk_idx.to_bytes(4, "big") + n_chunks.to_bytes(4, "big")
 
             chunk_start_idx = chunk_idx * chunk_size

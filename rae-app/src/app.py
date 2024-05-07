@@ -22,8 +22,8 @@ LOCALHOST = "127.0.0.1"
 class RaeDemo:
     robot = None
     device: dai.Device
-
     connection: Connection | None = None
+    rgb_queue: dai.DataOutputQueue
 
     def __init__(self):
         print("Initializing rae demo")
@@ -40,13 +40,15 @@ class RaeDemo:
 
         pipeline = create_pipeline(self.device)
         self.device.startPipeline(pipeline)
+        self.rgb_queue = self.device.getOutputQueue(
+            name="rgb", maxSize=4, blocking=False
+        )
 
     def stream_data(self):
-        rgb_queue = self.device.getOutputQueue(name="rgb", maxSize=4, blocking=False)
 
         while True:
-            if rgb_queue.has():
-                img = rgb_queue.get()
+            if self.rgb_queue.has():
+                img = self.rgb_queue.get()
                 message = {
                     "queue": "camera",
                     "data": img.getData().tobytes(),
@@ -73,15 +75,13 @@ class RaeDemo:
 
     # Read connection config from a QR code
     def read_connection_config(self):
-        rgb_queue = self.device.getOutputQueue(name="rgb", maxSize=1, blocking=False)
-
         print("Reading connection config ...")
 
         qcd = cv2.wechat_qrcode_WeChatQRCode()
 
         while True:
-            if rgb_queue.has():
-                img = rgb_queue.get()
+            if self.rgb_queue.has():
+                img = self.rgb_queue.get()
 
                 results, _ = qcd.detectAndDecode(img.getCvFrame())
                 if not results:
