@@ -21,7 +21,7 @@ export function VisualizerContainer(props: { children: React.ReactNode }) {
           mono: "/cam/mono",
         };
         const encodingByCategory = {
-          camera: "rgb8",
+          camera: "nv12",
           depth: "mono16",
           mono: "mono8",
         };
@@ -35,7 +35,7 @@ export function VisualizerContainer(props: { children: React.ReactNode }) {
           width: message.width,
           height: message.height,
           encoding,
-          step: message.width * 3,
+          step: message.width * 2,
           data: message.data,
         };
 

@@ -2020,11 +2020,11 @@ __metadata:
 
 "depthai-visualizer@file:../../studio/depthai-visualizer/depthai-visualizer.tgz::locator=rae-demo%40workspace%3A.":
   version: 0.0.1
-  resolution: "depthai-visualizer@file:../../studio/depthai-visualizer/depthai-visualizer.tgz#../../studio/depthai-visualizer/depthai-visualizer.tgz::hash=3f6e68&locator=rae-demo%40workspace%3A."
+  resolution: "depthai-visualizer@file:../../studio/depthai-visualizer/depthai-visualizer.tgz#../../studio/depthai-visualizer/depthai-visualizer.tgz::hash=241419&locator=rae-demo%40workspace%3A."
   dependencies:
     "@rollup/plugin-json": "npm:6.1.0"
     "@rollup/plugin-wasm": "npm:6.2.2"
-  checksum: 10c0/0c6dc775f9dcb4c585c1898d1bee98ee65b5de31d17c0796516fda63a4c7d543284a38507889d278627281aaf2998368f3bd3afd0962bee3624e26a07109e770
+  checksum: 10c0/ac86c20b167194100cbfe23bade99527a681ce118d243fdcb7f7355963a9404aad59dded5c1ab1b3e577792aad63685d3dfbc31fc5f9fa3c3b40128c49954fd6
   languageName: node
   linkType: hard
 

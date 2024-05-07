@@ -1,20 +1,10 @@
 import { useSourceControl, ImagePanel } from "depthai-visualizer";
 
 function Controls(props: { clientId: string }) {
-  const { selectSource, callService } = useSourceControl();
+  const { callService } = useSourceControl();
 
   return (
     <div>
-      <button
-        style={{
-          width: "80px",
-          height: "30px",
-          backgroundColor: "gray",
-        }}
-        onClick={() => selectSource(props.clientId)}
-      >
-        Connect
-      </button>
       <button
         style={{
           width: "80px",
@@ -33,7 +23,7 @@ export function Viewer(props: { clientId: string }) {
   const panelId = "camera";
 
   return (
-    <div style={{ height: "128px" }}>
+    <div style={{ height: "480px" }}>
       <Controls clientId={props.clientId} />
       <div style={{ display: "flex", height: "100%" }}>
         <ImagePanel panelId={panelId} imageTopic="/cam/color" />
