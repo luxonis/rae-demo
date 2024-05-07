@@ -6,6 +6,7 @@ def create_pipeline(device: dai.Device):
 
     rgb = pipeline.create(dai.node.ColorCamera)
     rgb.setBoardSocket(dai.CameraBoardSocket.CAM_A)
+    rgb.setPreviewSize(640, 480)
     rgb.setFps(30)
 
     xRgbOut = pipeline.create(dai.node.XLinkOut)
