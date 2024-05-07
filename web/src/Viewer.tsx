@@ -15,6 +15,41 @@ function Controls() {
       >
         Call Service
       </button>
+      <div style={{ marginTop: "10px" }}>
+        <button
+          style={{ width: "80px", height: "30px", backgroundColor: "gray" }}
+          onClick={() => alert("forward")}
+        >
+          Forward
+        </button>
+      </div>
+      <div style={{ marginTop: "10px" }}>
+        <button
+          style={{
+            width: "80px",
+            height: "30px",
+            backgroundColor: "gray",
+            marginRight: "10px",
+          }}
+          onClick={() => alert("left")}
+        >
+          Left
+        </button>
+        <button
+          style={{ width: "80px", height: "30px", backgroundColor: "gray" }}
+          onClick={() => alert("right")}
+        >
+          Right
+        </button>
+      </div>
+      <div style={{ marginTop: "10px" }}>
+        <button
+          style={{ width: "80px", height: "30px", backgroundColor: "gray" }}
+          onClick={() => alert("backward")}
+        >
+          Backward
+        </button>
+      </div>
     </div>
   );
 }

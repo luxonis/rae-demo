@@ -24,6 +24,7 @@ export const QRCode = memo(function QRCode(props: { clientId: string }) {
     <div>
       <canvas ref={canvasRef} />
       <div>
+        <h2>Wifi credentials</h2>
         <div style={{ marginTop: "10px" }}>
           <label style={{ marginRight: "10px" }}>Username</label>
           <input
@@ -35,43 +36,6 @@ export const QRCode = memo(function QRCode(props: { clientId: string }) {
           <label style={{ marginRight: "5px" }}>Password (optional)</label>
           <input onChange={(evt) => setPassword(evt.target.value)}></input>
         </div>
-      </div>
-
-      {/* four controls for driving a robotic vehicle */}
-      <div style={{ marginTop: "10px" }}>
-        <button
-          style={{ width: "80px", height: "30px", backgroundColor: "gray" }}
-          onClick={() => alert("forward")}
-        >
-          Forward
-        </button>
-      </div>
-      <div style={{ marginTop: "10px" }}>
-        <button
-          style={{
-            width: "80px",
-            height: "30px",
-            backgroundColor: "gray",
-            marginRight: "10px",
-          }}
-          onClick={() => alert("left")}
-        >
-          Left
-        </button>
-        <button
-          style={{ width: "80px", height: "30px", backgroundColor: "gray" }}
-          onClick={() => alert("right")}
-        >
-          Right
-        </button>
-      </div>
-      <div style={{ marginTop: "10px" }}>
-        <button
-          style={{ width: "80px", height: "30px", backgroundColor: "gray" }}
-          onClick={() => alert("backward")}
-        >
-          Backward
-        </button>
       </div>
     </div>
   );
