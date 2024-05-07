@@ -13,7 +13,7 @@ export function ConnectionStatusRouter() {
   }, [selectSource, clientId]);
 
   return status === "connected" ? (
-    <Viewer clientId={clientId.current} />
+    <Viewer />
   ) : (
     <QRCode clientId={clientId.current} />
   );
