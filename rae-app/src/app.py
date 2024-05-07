@@ -57,7 +57,7 @@ class RaeDemo:
                     "height": img.getHeight(),
                 }
                 data = cast(bytes, msgpack.dumps(message))
-
+                print("sending...")
                 if self.connection:
                     self.connection.broadcast(data)
 
@@ -130,7 +130,12 @@ class RaeDemo:
         rpc = MSGPACKRPCProtocol()
 
         while True:
-            pass
+            if self.connection:
+                msg = self.connection.receive()
+                print("receiving...")
+                if msg:
+                    response = rpc.parse(msg)
+                    print(response)
 
 
 if __name__ == "__main__":

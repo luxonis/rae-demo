@@ -1,4 +1,5 @@
 import webrtc_python
+import threading
 
 
 class Connection:
@@ -51,7 +52,15 @@ class Connection:
         client = self.clients[0]
 
         buffer = bytearray(1000)
-        bytes_read = client["control_channel"].receive(buffer)
+        bytes_read = 0
+
+        def receive_data():
+            global bytes_read
+            bytes_read = client["data_channel"].receive(buffer)
+
+        thread = threading.Thread(target=receive_data)
+        thread.start()
+        thread.join(0.01)
 
         if bytes_read > 0:
             return buffer[:bytes_read]
