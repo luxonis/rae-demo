@@ -2018,9 +2018,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"depthai-visualizer@file:../../studio/depthai-visualizer/depthai-visualizer.tgz::locator=rae-demo%40workspace%3A.":
+"depthai-visualizer@file:./depthai-visualizer.tgz::locator=rae-demo%40workspace%3A.":
   version: 0.0.1
-  resolution: "depthai-visualizer@file:../../studio/depthai-visualizer/depthai-visualizer.tgz#../../studio/depthai-visualizer/depthai-visualizer.tgz::hash=241419&locator=rae-demo%40workspace%3A."
+  resolution: "depthai-visualizer@file:./depthai-visualizer.tgz#./depthai-visualizer.tgz::hash=241419&locator=rae-demo%40workspace%3A."
   dependencies:
     "@rollup/plugin-json": "npm:6.1.0"
     "@rollup/plugin-wasm": "npm:6.2.2"
@@ -3783,7 +3783,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:^7.2.0"
     "@vitejs/plugin-react": "npm:^4.2.1"
     color: "npm:^4.2.3"
-    depthai-visualizer: ../../studio/depthai-visualizer/depthai-visualizer.tgz
+    depthai-visualizer: ./depthai-visualizer.tgz
     eslint: "npm:^8.57.0"
     eslint-plugin-react-hooks: "npm:^4.6.0"
     eslint-plugin-react-refresh: "npm:^0.4.6"
