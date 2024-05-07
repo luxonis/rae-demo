@@ -35,3 +35,15 @@ class Connection:
 
             for channel in self.channels:
                 channel.send(chunk)
+
+    def receive(self):
+        # TODO: Implement for multiple clients
+        if not self.channels:
+            return
+        channel = self.channels[0]
+
+        buffer = bytearray(1000)
+        bytes_read = channel.receive(buffer)
+
+        if bytes_read > 0:
+            return buffer[:bytes_read]
