@@ -5,7 +5,7 @@ class Connection:
     config: webrtc_python.WebRtcConfig
     connection: webrtc_python.WebRtc
 
-    channels = []
+    clients = []
 
     def __init__(self, client_id):
         self.config = webrtc_python.WebRtcConfig(
@@ -16,8 +16,16 @@ class Connection:
 
     def accept(self):
         connection_handle = self.connection.accept_connection(10)
-        webrtc_data_channel = connection_handle.create_data_channel("track")
-        self.channels.append(webrtc_data_channel)
+
+        data_channel = connection_handle.create_data_channel("data")
+        control_channel = connection_handle.create_data_channel("control")
+
+        client = {
+            "connection_handle": connection_handle,
+            "data_channel": data_channel,
+            "control_channel": control_channel,
+        }
+        self.clients.append(client)
 
     def broadcast(self, data: bytes):
         chunk_size = 16 * 1024 - 8  # 16KB - 8 bytes for header
@@ -33,17 +41,17 @@ class Connection:
             chunk = data[chunk_start_idx:chunk_end_idx]
             chunk = header + chunk
 
-            for channel in self.channels:
-                channel.send(chunk)
+            for client in self.clients:
+                client["data_channel"].send(chunk)
 
     def receive(self):
         # TODO: Implement for multiple clients
-        if not self.channels:
+        if not self.clients:
             return
-        channel = self.channels[0]
+        client = self.clients[0]
 
         buffer = bytearray(1000)
-        bytes_read = channel.receive(buffer)
+        bytes_read = client["control_channel"].receive(buffer)
 
         if bytes_read > 0:
             return buffer[:bytes_read]
