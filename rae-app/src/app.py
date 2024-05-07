@@ -42,13 +42,11 @@ class RaeDemo:
         self.device.startPipeline(pipeline)
 
     def stream_data(self):
-        left_camera_queue = self.device.getOutputQueue(
-            name="left_cam", maxSize=4, blocking=False
-        )
+        rgb_queue = self.device.getOutputQueue(name="rgb", maxSize=4, blocking=False)
 
         while True:
-            if left_camera_queue.has():
-                img = left_camera_queue.get()
+            if rgb_queue.has():
+                img = rgb_queue.get()
                 message = {
                     "queue": "camera",
                     "data": img.getData().tobytes(),
@@ -75,17 +73,15 @@ class RaeDemo:
 
     # Read connection config from a QR code
     def read_connection_config(self):
-        main_camera_queue = self.device.getOutputQueue(
-            name="main_cam", maxSize=1, blocking=False
-        )
+        rgb_queue = self.device.getOutputQueue(name="rgb", maxSize=1, blocking=False)
 
         print("Reading connection config ...")
 
         qcd = cv2.wechat_qrcode_WeChatQRCode()
 
         while True:
-            if main_camera_queue.has():
-                img = main_camera_queue.get()
+            if rgb_queue.has():
+                img = rgb_queue.get()
 
                 results, _ = qcd.detectAndDecode(img.getCvFrame())
                 if not results:
