@@ -19,7 +19,7 @@ export default defineConfig({
   define: {
     __filename: JSON.stringify(""),
     __dirname: JSON.stringify(""),
-    global: "typeof window !== 'undefined' ? window : {}",
+    global: "window",
     ReactNull: null,
 
     FOXGLOVE_STUDIO_VERSION: JSON.stringify("0.0.1"),
