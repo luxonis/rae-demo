@@ -130,12 +130,7 @@ class RaeDemo:
         rpc = MSGPACKRPCProtocol()
 
         while True:
-            if self.connection:
-                msg = self.connection.receive()
-                print("receiving...")
-                if msg:
-                    response = rpc.parse(msg)
-                    print(response)
+            pass
 
 
 if __name__ == "__main__":
